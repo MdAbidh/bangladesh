@@ -12,12 +12,3 @@ dist
 .idea
 coverage
 test
-src
-tsconfig.json
-tsconfig.build.json
-nest-cli.json
-.eslintrc.js
-.prettierrc
-docker-compose.yml
-Dockerfile
-.dockerignore

@@ -1,0 +1,35 @@
+{
+  "name": "ah-learning-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A.H Learning App - Enterprise Learning Management System",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,json,js}\"",
+    "clean": "turbo clean",
+    "db:generate": "cd apps/backend && npx prisma generate",
+    "db:push": "cd apps/backend && npx prisma db push",
+    "db:migrate": "cd apps/backend && npx prisma migrate dev",
+    "db:seed": "cd apps/backend && npx prisma db seed",
+    "db:studio": "cd apps/backend && npx prisma studio",
+    "frontend:dev": "cd apps/frontend && npm run dev",
+    "backend:dev": "cd apps/backend && npm run start:dev"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0",
+    "prettier": "^3.4.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}

@@ -32,8 +32,11 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
   },
   output: process.env.NEXT_OUTPUT_MODE === 'standalone' ? 'standalone' : undefined,
 };

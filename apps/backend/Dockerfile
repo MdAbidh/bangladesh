@@ -2,14 +2,15 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-RUN apk add --no-cache python3 make g++
-
+# Copy from repo root context (apps/backend/package.json)
 COPY package*.json ./
 COPY prisma ./prisma/
 
 RUN npm ci
 
-COPY . .
+COPY tsconfig*.json ./
+COPY nest-cli.json ./
+COPY src ./src
 
 RUN npx prisma generate
 RUN npm run build

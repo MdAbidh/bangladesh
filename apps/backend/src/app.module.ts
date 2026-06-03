@@ -53,17 +53,9 @@ import configuration from './config/configuration';
         ],
       }),
     }),
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+    CacheModule.register({
       isGlobal: true,
-      useFactory: (config: ConfigService) => ({
-        store: 'redis',
-        host: config.get<string>('REDIS_HOST', 'localhost'),
-        port: config.get<number>('REDIS_PORT', 6379),
-        password: config.get<string>('REDIS_PASSWORD'),
-        ttl: config.get<number>('CACHE_TTL', 300),
-      }),
+      ttl: 300,
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],

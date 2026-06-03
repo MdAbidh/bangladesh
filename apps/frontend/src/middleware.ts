@@ -32,11 +32,21 @@ function getToken(request: NextRequest): string | null {
   return request.cookies.get('accessToken')?.value ?? null;
 }
 
+function base64Decode(str: string): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  let output = '';
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  for (let bc = 0, bs = 0, bu = 0, i = 0; (bu = str.charAt(i++)); ~bu && (bs = bc % 4 ? bs * 64 + bu : bu, bc++ % 4) ? (output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6)))) : 0) {
+    bu = chars.indexOf(bu);
+  }
+  return output;
+}
+
 function parseToken(token: string): { role?: string; exp?: number } | null {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    const payload = JSON.parse(atob(parts[1]!));
+    const payload = JSON.parse(base64Decode(parts[1]!));
     return payload;
   } catch {
     return null;
