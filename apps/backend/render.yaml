@@ -1,0 +1,127 @@
+services:
+  - type: web
+    name: ah-learning-api
+    env: docker
+    region: oregon
+    plan: starter
+    branch: main
+    healthCheckPath: /api/v1/health
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: FRONTEND_URL
+        value: https://app.domain.com
+      - key: API_PREFIX
+        value: api/v1
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ah-learning-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRY
+        value: "15m"
+      - key: JWT_REFRESH_EXPIRY
+        value: "7d"
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: password
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://app.domain.com
+      - key: RATE_LIMIT_TTL
+        value: "60"
+      - key: RATE_LIMIT_MAX
+        value: "100"
+
+  - type: worker
+    name: ah-learning-worker
+    env: docker
+    region: oregon
+    plan: starter
+    branch: main
+    dockerfilePath: ./Dockerfile.worker
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ah-learning-db
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: ah-learning-cache
+          property: password
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+
+databases:
+  - name: ah-learning-db
+    plan: starter
+    region: oregon
+    databaseName: ah_learning
+    user: ah_learning_user
+    ipAllowList: []
+
+redis:
+  - name: ah-learning-cache
+    plan: starter
+    region: oregon
+    maxmemoryPolicy: allkeys-lru
