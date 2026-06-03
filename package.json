@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build",
+    "build": "turbo build --filter=@ah/frontend",
     "lint": "turbo lint",
     "test": "turbo test",
     "typecheck": "turbo typecheck",

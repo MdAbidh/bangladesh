@@ -24,10 +24,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Generate Prisma client
         run: npx prisma generate
@@ -79,9 +78,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Generate Prisma client
         run: npx prisma generate
         working-directory: ${{ env.BACKEND_DIR }}
@@ -117,9 +115,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Build frontend
         run: npm run build
         working-directory: ${{ env.FRONTEND_DIR }}
@@ -147,9 +144,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Generate Prisma client
         run: npx prisma generate
         working-directory: ${{ env.BACKEND_DIR }}
@@ -229,7 +225,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         working-directory: ${{ env.BACKEND_DIR }}
       - name: Run migrations
         env:
