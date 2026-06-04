@@ -16,7 +16,7 @@ interface TooltipProps {
   asChild?: boolean;
 }
 
-const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
+const Tooltip = forwardRef<HTMLButtonElement, TooltipProps>(
   (
     {
       children,

@@ -118,6 +118,3 @@ See [.env.example](./.env.example) for all required environment variables.
 ## License
 
 Private - All Rights Reserved
-e318da92cdfb83fcfb501232da2009188fb2c3fff9d63156c885eff5500bdc88fca1e09e75454a1123f233a07d973afa8064d66209a0698f20af936841405727
-
-b161ab44e0680a714fb0b1422f8f1db9204e73165b26d537d464c32c85c09f42395757ae97f8d7c7f14af628cee0362ce92ce26dc062b1660fb502fbbd634709

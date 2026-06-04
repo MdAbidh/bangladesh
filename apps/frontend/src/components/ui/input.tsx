@@ -16,7 +16,7 @@ const inputVariants = cva(
         flushed:
           'border-0 border-b-2 border-gray-300 rounded-none px-0 focus-visible:ring-0 focus-visible:border-primary-500 dark:border-gray-700 dark:text-gray-100',
       },
-      error: {
+      hasError: {
         true: 'border-red-500 focus-visible:ring-red-500 dark:border-red-400',
       },
     },
@@ -27,7 +27,7 @@ const inputVariants = cva(
 );
 
 interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariants> {
   label?: string;
   error?: string;
@@ -59,7 +59,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             className={cn(
-              inputVariants({ variant, error: !!error, className }),
+              inputVariants({ variant, hasError: !!error, className }),
               icon && 'pl-10',
               rightIcon && 'pr-10',
             )}

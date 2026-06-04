@@ -23,6 +23,8 @@ const badgeVariants = cva(
           'bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300',
         glass:
           'bg-white/20 text-white backdrop-blur-xl border border-white/30',
+        'glass-primary':
+          'bg-primary-500/20 text-white backdrop-blur-xl border border-primary-400/30',
       },
       size: {
         sm: 'px-2 py-0.5 text-[10px]',

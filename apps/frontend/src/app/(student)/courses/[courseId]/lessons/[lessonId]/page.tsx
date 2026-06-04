@@ -189,7 +189,7 @@ export default function LessonPlayerPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{resource.title}</p>
-                      <p className="text-xs text-gray-500">{(resource.fileSize / 1024).toFixed(0)} KB</p>
+                      <p className="text-xs text-gray-500">{resource.fileSize ? `${(resource.fileSize / 1024).toFixed(0)} KB` : 'External link'}</p>
                     </div>
                     <Download className="h-4 w-4 text-gray-400" />
                   </a>

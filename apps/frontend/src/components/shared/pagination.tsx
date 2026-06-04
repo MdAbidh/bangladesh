@@ -17,7 +17,7 @@ function getPageNumbers(current: number, total: number, siblings: number): (numb
   const totalNumbers = siblings * 2 + 5;
   const totalBlocks = totalNumbers + 2;
 
-  if (totalPages <= totalBlocks) {
+  if (total <= totalBlocks) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
 

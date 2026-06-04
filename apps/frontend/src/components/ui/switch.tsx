@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 
 interface SwitchProps {
   checked?: boolean;
+  defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;
   label?: string;
@@ -23,7 +24,7 @@ const sizeMap = {
 };
 
 const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
-  ({ checked, onCheckedChange, disabled, label, description, id, className, size = 'md' }, ref) => {
+  ({ checked, defaultChecked, onCheckedChange, disabled, label, description, id, className, size = 'md' }, ref) => {
     const switchId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
@@ -32,6 +33,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           ref={ref}
           id={switchId}
           checked={checked}
+          defaultChecked={defaultChecked}
           onCheckedChange={onCheckedChange}
           disabled={disabled}
           className={cn(

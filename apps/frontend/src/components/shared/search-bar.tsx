@@ -81,7 +81,7 @@ export function SearchBar({
         e.preventDefault();
         if (selectedIndex >= 0 && items[selectedIndex]) {
           const item = items[selectedIndex];
-          if ('href' in item) {
+          if (typeof item === 'object' && 'href' in item) {
             onResultClick?.(item as SearchResult);
           } else {
             setQuery(item as string);
@@ -98,7 +98,7 @@ export function SearchBar({
 
   const groupedResults = results.reduce<Record<string, SearchResult[]>>((acc, result) => {
     if (!acc[result.category]) acc[result.category] = [];
-    acc[result.category].push(result);
+    acc[result.category]!.push(result);
     return acc;
   }, {});
 

@@ -11,7 +11,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
+          DEFAULT: '#3b82f6',
           50: '#eff6ff',
           100: '#dbeafe',
           200: '#bfdbfe',
@@ -25,6 +31,7 @@ const config: Config = {
           950: '#172554',
         },
         secondary: {
+          DEFAULT: '#8b5cf6',
           50: '#f5f3ff',
           100: '#ede9fe',
           200: '#ddd6fe',
@@ -38,6 +45,7 @@ const config: Config = {
           950: '#2e1065',
         },
         accent: {
+          DEFAULT: '#d946ef',
           50: '#fdf4ff',
           100: '#fae8ff',
           200: '#f5d0fe',
@@ -50,6 +58,27 @@ const config: Config = {
           900: '#701a75',
           950: '#4a044e',
         },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -91,11 +120,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [],
 };
 
 export default config;

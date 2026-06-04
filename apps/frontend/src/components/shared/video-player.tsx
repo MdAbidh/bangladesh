@@ -52,7 +52,7 @@ export function VideoPlayer({
   const [isPiP, setIsPiP] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<ReactPlayer>(null);
-  const controlsTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const controlsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const hideControls = useCallback(() => {
     if (controlsTimeout.current) clearTimeout(controlsTimeout.current);

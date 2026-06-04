@@ -6,7 +6,7 @@
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
     "noEmit": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

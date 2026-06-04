@@ -20,7 +20,7 @@ export interface Course {
   id: string;
   title: string;
   slug: string;
-  description: string;
+  description?: string;
   shortDescription: string;
   thumbnailUrl: string | null;
   category: Category;

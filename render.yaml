@@ -19,9 +19,7 @@ services:
       - key: API_PREFIX
         value: api/v1
       - key: DATABASE_URL
-        fromDatabase:
-          name: ah-learning-db
-          property: connectionString
+        value: postgresql://ahlearningdb_user:oIo9iBvxtoeY8XoNshzZiygKX5XoMcYQ@dpg-d8g70m3bc2fs73cbihmg-a.singapore-postgres.render.com/ahlearningdb
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -85,9 +83,7 @@ services:
       - key: WORKER
         value: "true"
       - key: DATABASE_URL
-        fromDatabase:
-          name: ah-learning-db
-          property: connectionString
+        value: postgresql://ahlearningdb_user:oIo9iBvxtoeY8XoNshzZiygKX5XoMcYQ@dpg-d8g70m3bc2fs73cbihmg-a.singapore-postgres.render.com/ahlearningdb
       - key: REDIS_HOST
         fromService:
           type: redis
@@ -117,14 +113,6 @@ services:
         sync: false
       - key: SMTP_PASSWORD
         sync: false
-
-databases:
-  - name: ah-learning-db
-    plan: starter
-    region: oregon
-    databaseName: ah_learning
-    user: ah_learning_user
-    ipAllowList: []
 
 redis:
   - name: ah-learning-cache

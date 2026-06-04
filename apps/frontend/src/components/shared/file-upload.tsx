@@ -62,7 +62,7 @@ export function FileUpload({
     const validFiles: File[] = [];
 
     Array.from(fileList).forEach((file) => {
-      const error = validateFile(file);
+      const error = validateFile(file) ?? undefined;
       const preview: FilePreview = {
         file,
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
