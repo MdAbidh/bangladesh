@@ -41,9 +41,4 @@ export class SearchQueryDto extends PaginationDto {
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   isFree?: boolean;
-
-  @ApiPropertyOptional({ default: 'relevance', enum: ['relevance', 'popularity', 'date', 'rating'], description: 'Sort field for courses' })
-  @IsOptional()
-  @IsString()
-  sortBy?: string;
 }

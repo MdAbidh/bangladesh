@@ -274,26 +274,26 @@ export class AuthService {
 
   async resetPassword(dto: ResetPasswordDto) {
     try {
-      const email = await admin.auth().verifyPasswordResetCode(dto.resetCode);
-      if (email !== dto.email) {
-        throw new BadRequestException('Reset code does not match the provided email');
+      // Firebase Admin SDK doesn't support verifyPasswordResetCode
+      // Password reset should be handled by Firebase client SDK on frontend
+      // For backend, we use a simpler approach with database-stored reset tokens
+      
+      // This is a placeholder - in production, use a reset token from database
+      const user = await this.usersService.findByEmail(dto.email);
+      if (!user) {
+        throw new BadRequestException('User not found');
       }
-      await admin.auth().confirmPasswordReset(dto.resetCode, dto.newPassword);
+
+      // Update user password (would need password field in User model)
+      // For now, we'll throw an error asking users to use Firebase Console
+      throw new BadRequestException(
+        'Password reset through API is disabled. Please use the password reset email link.'
+      );
     } catch (error: any) {
       if (error instanceof BadRequestException) throw error;
-      if (error.code === 'auth/expired-action-code') {
-        throw new BadRequestException('Password reset code has expired');
-      }
-      if (error.code === 'auth/invalid-action-code') {
-        throw new BadRequestException('Invalid password reset code');
-      }
       this.logger.error(`Password reset failed: ${error.message}`, error.stack);
       throw new BadRequestException('Password reset failed. Please try again.');
     }
-
-    this.logger.log(`Password reset successful: ${dto.email}`);
-
-    return { message: 'Password reset successful' };
   }
 
   async getMe(userId: string) {

@@ -23,7 +23,7 @@ export class AuditLogsService {
       resource: params.resource,
       resourceId: params.resourceId,
       description: params.description,
-      metadata: params.metadata,
+      metadata: params.metadata as any,
       ipAddress: params.ipAddress,
       userAgent: params.userAgent,
       actor: params.actorId ? { connect: { id: params.actorId } } : undefined,

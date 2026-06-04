@@ -90,6 +90,7 @@ model User {
   roles          UserRoleAssignment[]
   refreshTokens  RefreshToken[]
   courses        Course[]              @relation("TeacherCourses")
+  approvedCourses Course[]             @relation("ApprovedCourses")
   enrollments    Enrollment[]
   progress       Progress[]
   certificates   Certificate[]
@@ -101,6 +102,9 @@ model User {
   comments       DiscussionComment[]
   notifications  Notification[]
   teacherRequest TeacherRequest?
+  videosUploaded Video[]              @relation("VideoUploaded")
+  resourcesUploaded Resource[]         @relation("ResourceUploaded")
+  reviewedTeacherRequests TeacherRequest[] @relation("Reviewer")
   auditLogs      AuditLog[]            @relation("Actor")
 
   @@index([email])
@@ -259,8 +263,9 @@ model Course {
   enrollments  Enrollment[]
   reviews      CourseReview[]
   ratings      CourseRating[]
-  bookmarks    Bookmark[]
   watchHistory WatchHistory[]
+  discussions  DiscussionThread[]
+  videos       Video[]
   certificates Certificate[]
   analytics    CourseAnalytics[]
 
@@ -326,6 +331,7 @@ model Lesson {
   progress   Progress[]
   bookmarks  Bookmark[]
   watchHistory WatchHistory[]
+  discussions DiscussionThread[]
 
   @@index([sectionId])
   @@index([sectionId, sortOrder])
@@ -361,8 +367,8 @@ model Video {
   updatedAt       DateTime    @updatedAt
   deletedAt       DateTime?
 
-  course    Course   @relation(fields: [courseId], references: [id])
-  uploadedBy User    @relation(fields: [uploadedById], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  uploadedBy User    @relation("VideoUploaded", fields: [uploadedById], references: [id])
   lessons   Lesson[]
 
   @@index([courseId])
@@ -391,7 +397,7 @@ model Resource {
   deletedAt   DateTime?
 
   lesson      Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  uploadedBy  User   @relation(fields: [uploadedById], references: [id])
+  uploadedBy  User   @relation("ResourceUploaded", fields: [uploadedById], references: [id], onDelete: Cascade)
 
   @@index([lessonId])
   @@index([firebaseUrl])
@@ -462,6 +468,7 @@ model WatchHistory {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, courseId, lessonId])
   @@index([userId])
   @@index([courseId, userId])
   @@index([watchedAt])
@@ -530,7 +537,7 @@ model DiscussionThread {
   deletedAt DateTime?
 
   course  Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lesson  Lesson?            @relation(fields: [lessonId], references: [id])
+  lesson  Lesson?            @relation(fields: [lessonId], references: [id], onDelete: SetNull)
   user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments DiscussionComment[]
 
@@ -621,7 +628,7 @@ model TeacherRequest {
   updatedAt   DateTime @updatedAt
 
   user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reviewer   User? @relation("Reviewer", fields: [reviewedBy], references: [id])
+  reviewer   User? @relation("Reviewer", fields: [reviewedBy], references: [id], onDelete: SetNull)
 
   @@index([status])
   @@index([userId])

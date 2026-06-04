@@ -132,10 +132,10 @@ export class CoursesService {
 
     return this.coursesRepository.update(id, {
       status: CourseStatus.PUBLISHED,
-      approvedById: adminId,
+      approvedBy: { connect: { id: adminId } },
       approvedAt: new Date(),
       publishedAt: course.publishedAt || new Date(),
-    });
+    } as any);
   }
 
   async softDelete(id: string, userId: string, userRole: string) {

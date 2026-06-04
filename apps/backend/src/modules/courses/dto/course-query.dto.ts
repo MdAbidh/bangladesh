@@ -32,11 +32,6 @@ export class CourseQueryDto extends PaginationDto {
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ enum: ['popularity', 'rating', 'date', 'price'], description: 'Sort courses by' })
-  @IsOptional()
-  @IsString()
-  sortBy?: string;
-
   @ApiPropertyOptional({ description: 'Filter free courses only' })
   @IsOptional()
   @Transform(({ value }) => value === 'true' || value === true)

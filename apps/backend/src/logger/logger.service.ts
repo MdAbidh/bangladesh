@@ -78,8 +78,9 @@ export class LoggerService implements NestLoggerService {
             ),
           });
           transports.push(sentryTransport);
-        } catch {
-          this.logger?.warn?.('Sentry transport configured but @sentry/node is not installed');
+        } catch (e) {
+          // Sentry not installed, skip
+          console.warn('Sentry transport configured but @sentry/node is not installed');
         }
       }
     }

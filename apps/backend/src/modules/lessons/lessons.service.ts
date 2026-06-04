@@ -140,11 +140,10 @@ export class LessonsService {
 
     await this.prisma.watchHistory.upsert({
       where: {
-        userId_lessonId: { userId, lessonId },
+        userId_courseId_lessonId: { userId, courseId: section.courseId, lessonId },
       },
       update: {
         watchedAt: new Date(),
-        courseId: section.courseId,
         duration: lesson.duration,
       },
       create: {

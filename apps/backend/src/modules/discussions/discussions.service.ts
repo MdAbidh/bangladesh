@@ -18,7 +18,7 @@ export class DiscussionsService {
     const thread = await this.discussionsRepository.createThread({
       title: dto.title,
       content: dto.content,
-      lessonId: dto.lessonId,
+      lesson: dto.lessonId ? { connect: { id: dto.lessonId } } : undefined,
       user: { connect: { id: userId } },
       course: { connect: { id: dto.courseId } },
     });
@@ -46,7 +46,7 @@ export class DiscussionsService {
 
     const comment = await this.discussionsRepository.createComment({
       content: dto.content,
-      parentId: dto.parentId,
+      parent: dto.parentId ? { connect: { id: dto.parentId } } : undefined,
       user: { connect: { id: userId } },
       thread: { connect: { id: threadId } },
     });

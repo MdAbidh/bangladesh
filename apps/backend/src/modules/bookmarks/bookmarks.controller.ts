@@ -35,7 +35,7 @@ export class BookmarksController {
     @Body() dto: BookmarkDto,
   ) {
     const data = await this.bookmarksService.toggle(user.sub, dto);
-    const message = data.created ? 'Bookmark added' : 'Bookmark removed';
+    const message = data.bookmarked ? 'Bookmark added' : 'Bookmark removed';
     return { success: true, message, data };
   }
 

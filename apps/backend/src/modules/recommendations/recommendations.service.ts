@@ -10,7 +10,7 @@ export class RecommendationsService {
   async getRecommendations(userId: string, limit: number = 10) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, deletedAt: null },
+      select: { id: true },
     });
     if (!user) {
       throw new NotFoundException('User not found');

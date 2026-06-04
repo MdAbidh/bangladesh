@@ -336,7 +336,7 @@ export class CoursesRepository {
           },
         },
       });
-      return course as Promise<Course>;
+      return course;
     }
 
     return this.prisma.course.update({
@@ -384,7 +384,7 @@ export class CoursesRepository {
         this.prisma.course.count({ where: { status: 'ARCHIVED', deletedAt: null } }),
         this.prisma.enrollment.count({ where: { status: 'ACTIVE' } }),
         this.prisma.enrollment.aggregate({
-          _sum: { id: false },
+          _count: true,
         }),
         this.prisma.course.count({ where: { isFeatured: true, deletedAt: null } }),
       ]);

@@ -22,7 +22,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: Error, user: unknown, info: Error | string) {
+  handleRequest<TUser = any>(err: any, user: any, info: any, context?: ExecutionContext, status?: any): TUser {
     if (err || !user) {
       if (info instanceof Error) {
         const messages: Record<string, string> = {
@@ -35,6 +35,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Authentication required');
     }
 
-    return user;
+    return user as TUser;
   }
 }

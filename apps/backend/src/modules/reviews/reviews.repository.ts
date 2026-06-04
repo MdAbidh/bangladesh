@@ -83,15 +83,18 @@ export class ReviewsRepository {
           content: dto.content,
           userId,
           courseId: dto.courseId,
-          ratings: {
-            create: {
-              userId,
-              courseId: dto.courseId,
-              rating: dto.rating,
-            },
-          },
         },
         select: reviewSelect,
+      });
+
+      await tx.courseRating.upsert({
+        where: { userId_courseId: { userId, courseId: dto.courseId } },
+        update: { rating: dto.rating },
+        create: {
+          userId,
+          courseId: dto.courseId,
+          rating: dto.rating,
+        },
       });
 
       return review;

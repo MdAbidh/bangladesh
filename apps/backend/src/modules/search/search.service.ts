@@ -160,7 +160,7 @@ export class SearchService {
     }
 
     if (isFree !== undefined) {
-      where.isFree = isFree === true || isFree === 'true';
+      where.isFree = isFree === true;
     }
 
     if (priceMin !== undefined || priceMax !== undefined) {

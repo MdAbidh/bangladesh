@@ -8,15 +8,15 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
-  @ApiProperty({ example: 'Password123!', description: 'User password' })
+  @ApiPropertyOptional({ example: 'Password123!', description: 'User password (optional for Firebase auth)' })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(8)
   @MaxLength(128)
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
     message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
   })
-  password: string;
+  password?: string;
 
   @ApiProperty({ example: 'John', description: 'User first name' })
   @IsString()

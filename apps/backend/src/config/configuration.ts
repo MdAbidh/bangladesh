@@ -1,5 +1,5 @@
 export default () => ({
-  port: parseInt(process.env.PORT, 10) || 4000,
+  port: parseInt(process.env.PORT || '4000', 10),
   database: {
     url: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ah_learning',
   },
@@ -11,7 +11,7 @@ export default () => ({
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
     password: process.env.REDIS_PASSWORD || undefined,
   },
   firebase: {
@@ -22,7 +22,7 @@ export default () => ({
   },
   smtp: {
     host: process.env.SMTP_HOST || 'smtp.mailtrap.io',
-    port: parseInt(process.env.SMTP_PORT, 10) || 2525,
+    port: parseInt(process.env.SMTP_PORT || '2525', 10),
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
     from: process.env.SMTP_FROM || 'noreply@ahlearning.com',
@@ -34,11 +34,11 @@ export default () => ({
     credentials: true,
   },
   rateLimit: {
-    ttl: parseInt(process.env.RATE_LIMIT_TTL, 10) || 60,
-    max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
+    ttl: parseInt(process.env.RATE_LIMIT_TTL || '60', 10),
+    max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10),
   },
   cache: {
-    ttl: parseInt(process.env.CACHE_TTL, 10) || 300,
+    ttl: parseInt(process.env.CACHE_TTL || '300', 10),
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,

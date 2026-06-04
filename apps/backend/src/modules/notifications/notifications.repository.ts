@@ -57,7 +57,12 @@ export class NotificationsRepository {
     imageUrl?: string;
     userId: string;
   }>) {
-    await this.prisma.notification.createMany({ data });
+    await this.prisma.notification.createMany({
+      data: data.map((d) => ({
+        ...d,
+        type: d.type as any,
+      })),
+    });
     return this.prisma.notification.findMany({
       where: { userId: { in: data.map((d) => d.userId) }, createdAt: { gte: new Date(Date.now() - 5000) } },
       orderBy: { createdAt: 'desc' },
