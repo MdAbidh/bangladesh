@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, LogIn, Github } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, LogIn, Shield } from 'lucide-react';
 import { ROUTES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
@@ -34,13 +34,14 @@ const fadeItem = {
 };
 
 export default function LoginPage() {
-  const router = useRouter();
+  const { login, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -48,11 +49,17 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    router.push(ROUTES.DASHBOARD);
+    setError(null);
+    try {
+      await login({ email: data.email, password: data.password });
+    } catch (err: any) {
+      setError(err?.response?.data?.message || 'Invalid email or password. Please try again.');
+    }
+  };
+
+  const fillAdminCredentials = () => {
+    setValue('email', 'admin@ahlearning.com');
+    setValue('password', 'Admin@123456');
   };
 
   return (
@@ -112,6 +119,12 @@ export default function LoginPage() {
             />
           </div>
 
+          {error && (
+            <div className="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              {error}
+            </div>
+          )}
+
           <div className="mt-4 flex items-center justify-between">
             <label className="flex cursor-pointer items-center gap-2">
               <input
@@ -142,27 +155,30 @@ export default function LoginPage() {
         </Button>
       </motion.form>
 
+      {/* Admin Quick Login */}
       <motion.div variants={fadeItem} className="relative my-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-200 dark:border-gray-800" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-white px-3 text-gray-400 dark:bg-gray-950 dark:text-gray-500">
-            Or continue with
+            Or
           </span>
         </div>
       </motion.div>
 
       <motion.div variants={fadeItem}>
-        <Button
-          variant="outline"
-          size="xl"
-          fullWidth
-          leftIcon={<Github className="h-5 w-5" />}
-          onClick={() => {}}
+        <button
+          type="button"
+          onClick={fillAdminCredentials}
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/30"
         >
-          Continue with Google
-        </Button>
+          <Shield className="h-4 w-4" />
+          Sign in as Admin
+        </button>
+        <p className="mt-1 text-center text-xs text-gray-400 dark:text-gray-500">
+          Fills admin credentials — you still need to click Sign In
+        </p>
       </motion.div>
 
       <motion.p

@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build
+.next/
+out/
+
+# Environment files (DO NOT COMMIT)
+.env
+.env.local
+.env.*.local
+
+# Keep example files
+!.env.example
+
+# OS
+.DS_Store

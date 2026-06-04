@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, VideoStatus } from '@prisma/client';
 
 const videoListSelect: Prisma.VideoSelect = {
   id: true,
@@ -53,7 +53,7 @@ export class VideosRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.VideoCreateInput) {
+  async create(data: Prisma.VideoUncheckedCreateInput) {
     return this.prisma.video.create({ data, select: videoListSelect });
   }
 
@@ -74,13 +74,13 @@ export class VideosRepository {
 
   async findByStatus(status: string) {
     return this.prisma.video.findMany({
-      where: { status: status as Prisma.EnumVideoStatusFilter['equals'], deletedAt: null },
+      where: { status: status as VideoStatus, deletedAt: null },
       select: videoListSelect,
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async update(id: string, data: Prisma.VideoUpdateInput) {
+  async update(id: string, data: Prisma.VideoUncheckedUpdateInput) {
     return this.prisma.video.update({
       where: { id },
       data,

@@ -14,6 +14,17 @@ interface AuthActions {
   refreshProfile: () => Promise<void>;
 }
 
+function getRoleRedirect(role?: string): string {
+  switch (role) {
+    case 'ADMIN':
+      return '/admin/dashboard';
+    case 'TEACHER':
+      return '/teacher';
+    default:
+      return '/dashboard';
+  }
+}
+
 export function useAuth() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, setUser, clearUser, setLoading } = useAuthStore();
@@ -50,7 +61,8 @@ export function useAuth() {
           localStorage.setItem('accessToken', response.data.accessToken);
           localStorage.setItem('refreshToken', response.data.refreshToken);
           setUser(response.data.user);
-          router.push('/dashboard');
+          const redirectPath = getRoleRedirect(response.data.user?.role);
+          router.push(redirectPath);
         }
       } finally {
         setLoading(false);

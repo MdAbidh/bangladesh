@@ -64,7 +64,18 @@ import configuration from './config/configuration';
         connection: {
           host: config.get<string>('REDIS_HOST', 'localhost'),
           port: config.get<number>('REDIS_PORT', 6379),
-          password: config.get<string>('REDIS_PASSWORD'),
+          password: config.get<string>('REDIS_PASSWORD') || undefined,
+          // Optional: gracefully handle missing Redis locally
+          enableOfflineQueue: false,
+          lazyConnect: true,
+          retryStrategy: (times: number) => {
+            if (times > 3) return null; // stop retrying after 3 attempts
+            return Math.min(times * 1000, 3000);
+          },
+        },
+        defaultJobOptions: {
+          removeOnComplete: true,
+          removeOnFail: false,
         },
       }),
     }),
