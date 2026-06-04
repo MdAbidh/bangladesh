@@ -46,8 +46,8 @@ export class VideosService {
       size: dto.size,
       status: 'UPLOADING',
       chunkUpload: dto.size > CHUNK_THRESHOLD,
-      course: { connect: { id: dto.courseId } },
-      uploadedBy: { connect: { id: userId } },
+      courseId: dto.courseId,
+      uploadedById: userId,
     });
 
     this.logger.log(`Video upload initiated: ${video.id} by user ${userId}`);
