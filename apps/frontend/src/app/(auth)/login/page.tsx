@@ -62,6 +62,27 @@ export default function LoginPage() {
     setValue('password', 'Admin@123456');
   };
 
+  const fillTeacherCredentials = () => {
+    setValue('email', 'teacher@ahlearning.com');
+    setValue('password', 'Teacher@123456');
+  };
+
+  const fillStudentCredentials = () => {
+    setValue('email', 'student@ahlearning.com');
+    setValue('password', 'Student@123456');
+  };
+
+  const quickLogin = async (email: string, password: string) => {
+    setError(null);
+    try {
+      setValue('email', email);
+      setValue('password', password);
+      await login({ email, password });
+    } catch (err: any) {
+      setError(err?.message || 'Invalid email or password. Please try again.');
+    }
+  };
+
   return (
     <motion.div
       variants={stagger}
@@ -167,18 +188,52 @@ export default function LoginPage() {
         </div>
       </motion.div>
 
-      <motion.div variants={fadeItem}>
-        <button
-          type="button"
-          onClick={fillAdminCredentials}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/30"
-        >
-          <Shield className="h-4 w-4" />
-          Sign in as Admin
-        </button>
-        <p className="mt-1 text-center text-xs text-gray-400 dark:text-gray-500">
-          Fills admin credentials — you still need to click Sign In
+      <motion.div variants={fadeItem} className="space-y-2">
+        <p className="text-center text-xs font-medium text-gray-500 dark:text-gray-400">
+          Quick Demo Logins (click to sign in instantly)
         </p>
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => quickLogin('admin@ahlearning.com', 'Admin@123456')}
+            disabled={isLoading}
+            className="flex items-center justify-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-100 disabled:opacity-50 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/30"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            Admin
+          </button>
+          <button
+            type="button"
+            onClick={() => quickLogin('teacher@ahlearning.com', 'Teacher@123456')}
+            disabled={isLoading}
+            className="flex items-center justify-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2.5 text-xs font-semibold text-purple-700 transition-colors hover:bg-purple-100 disabled:opacity-50 dark:border-purple-800/50 dark:bg-purple-900/20 dark:text-purple-400 dark:hover:bg-purple-900/30"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            Teacher
+          </button>
+          <button
+            type="button"
+            onClick={() => quickLogin('student@ahlearning.com', 'Student@123456')}
+            disabled={isLoading}
+            className="flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2.5 text-xs font-semibold text-blue-700 transition-colors hover:bg-blue-100 disabled:opacity-50 dark:border-blue-800/50 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            Student
+          </button>
+        </div>
+        <div className="flex justify-center gap-3 pt-1 text-[10px] text-gray-400">
+          <button type="button" onClick={fillAdminCredentials} className="hover:text-gray-600 dark:hover:text-gray-300">
+            Fill Admin
+          </button>
+          <span>•</span>
+          <button type="button" onClick={fillTeacherCredentials} className="hover:text-gray-600 dark:hover:text-gray-300">
+            Fill Teacher
+          </button>
+          <span>•</span>
+          <button type="button" onClick={fillStudentCredentials} className="hover:text-gray-600 dark:hover:text-gray-300">
+            Fill Student
+          </button>
+        </div>
       </motion.div>
 
       <motion.p

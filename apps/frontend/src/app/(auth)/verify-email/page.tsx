@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Mail, ShieldCheck, ArrowLeft, RefreshCw, CheckCircle } from 'lucide-react';
+import { Mail, ShieldCheck, ArrowLeft, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
+import { authService } from '@/services/auth.service';
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -36,9 +37,10 @@ export default function VerifyEmailPage() {
   const [timer, setTimer] = useState(RESEND_COOLDOWN);
   const [canResend, setCanResend] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const email = 'user@example.com';
+  const email = typeof window !== 'undefined' ? (sessionStorage.getItem('pendingVerificationEmail') || 'user@example.com') : 'user@example.com';
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -88,20 +90,37 @@ export default function VerifyEmailPage() {
     inputRefs.current[nextIndex]?.focus();
   }, []);
 
-  const handleResend = useCallback(() => {
+  const handleResend = useCallback(async () => {
     if (!canResend) return;
-    setTimer(RESEND_COOLDOWN);
-    setCanResend(false);
-    setOtp(Array(6).fill(''));
-    inputRefs.current[0]?.focus();
-  }, [canResend]);
+    setError(null);
+    setIsLoading(true);
+    try {
+      await authService.resendOtp(email);
+      setTimer(RESEND_COOLDOWN);
+      setCanResend(false);
+      setOtp(Array(6).fill(''));
+      inputRefs.current[0]?.focus();
+    } catch (err: any) {
+      setError(err?.message || 'Failed to resend OTP');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [canResend, email]);
 
   const handleVerify = async () => {
+    setError(null);
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    setVerified(true);
-    setTimeout(() => router.push(ROUTES.DASHBOARD), 2000);
+    try {
+      const otpCode = otp.join('');
+      await authService.verifyEmail({ email, otp: otpCode });
+      sessionStorage.removeItem('pendingVerificationEmail');
+      setVerified(true);
+      setTimeout(() => router.push(ROUTES.DASHBOARD), 1500);
+    } catch (err: any) {
+      setError(err?.message || 'Invalid OTP. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const otpComplete = otp.every((d) => d !== '');
@@ -188,6 +207,11 @@ export default function VerifyEmailPage() {
           <Mail className="h-4 w-4 text-gray-400" />
           {email}
         </div>
+        {process.env.NEXT_PUBLIC_USE_MOCK_AUTH === 'true' && (
+          <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+            (Dev mode: check browser console for OTP)
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={fadeItem} className="mt-8">
@@ -218,7 +242,17 @@ export default function VerifyEmailPage() {
         </div>
       </motion.div>
 
-      <motion.div variants={fadeItem} className="mt-8">
+      {error && (
+        <motion.div
+          variants={fadeItem}
+          className="mt-4 flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400"
+        >
+          <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
+        </motion.div>
+      )}
+
+      <motion.div variants={fadeItem} className="mt-6">
         <Button
           variant="primary"
           size="xl"

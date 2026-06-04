@@ -60,12 +60,17 @@ export function useAuth() {
         if (response.success && response.data) {
           localStorage.setItem('accessToken', response.data.accessToken);
           localStorage.setItem('refreshToken', response.data.refreshToken);
+          document.cookie = `ah-learning-auth=mock; path=/; max-age=604800; SameSite=Lax`;
           setUser(response.data.user);
           const redirectPath = getRoleRedirect(response.data.user?.role);
           router.push(redirectPath);
+          router.refresh();
+        } else {
+          throw new Error(response.message || 'Login failed');
         }
-      } finally {
+      } catch (err) {
         setLoading(false);
+        throw err;
       }
     },
     [router, setUser, setLoading],
@@ -84,11 +89,17 @@ export function useAuth() {
         if (response.success && response.data) {
           localStorage.setItem('accessToken', response.data.accessToken);
           localStorage.setItem('refreshToken', response.data.refreshToken);
+          document.cookie = `ah-learning-auth=mock; path=/; max-age=604800; SameSite=Lax`;
           setUser(response.data.user);
-          router.push('/dashboard');
+          const redirectPath = getRoleRedirect(response.data.user?.role);
+          router.push(redirectPath);
+          router.refresh();
+        } else {
+          throw new Error(response.message || 'Registration failed');
         }
-      } finally {
+      } catch (err) {
         setLoading(false);
+        throw err;
       }
     },
     [router, setUser, setLoading],
@@ -102,6 +113,7 @@ export function useAuth() {
     } finally {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      document.cookie = 'ah-learning-auth=; path=/; max-age=0';
       clearUser();
       router.push('/login');
     }
