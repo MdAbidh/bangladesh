@@ -624,6 +624,7 @@ model TeacherRequest {
   status      String   @default("PENDING")
   reviewedBy  String?  @db.Uuid
   reviewedAt  DateTime?
+  metadata    Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
