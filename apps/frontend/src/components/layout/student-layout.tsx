@@ -18,22 +18,22 @@ const studentSections = [
     label: 'Main',
     items: [
       { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-      { label: 'My Courses', href: '/dashboard/my-courses', icon: BookOpen },
-      { label: 'My Learning', href: '/dashboard/learning', icon: GraduationCap },
+      { label: 'My Courses', href: '/courses', icon: BookOpen },
+      { label: 'My Learning', href: '/my-learning', icon: GraduationCap },
     ],
   },
   {
     label: 'Achievements',
     items: [
-      { label: 'Progress', href: '/dashboard/progress', icon: BarChart3 },
-      { label: 'Certificates', href: '/dashboard/certificates', icon: Award },
+      { label: 'Progress', href: '/my-learning', icon: BarChart3 },
+      { label: 'Certificates', href: '/certificates', icon: Award },
     ],
   },
   {
     label: 'Account',
     items: [
-      { label: 'Profile', href: '/dashboard/profile', icon: User },
-      { label: 'Settings', href: '/dashboard/settings', icon: Settings },
+      { label: 'Profile', href: '/profile', icon: User },
+      { label: 'Settings', href: '/settings', icon: Settings },
     ],
   },
 ];

@@ -17,13 +17,25 @@ import configuration from './config/configuration';
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        connection: {
+      useFactory: (config: ConfigService) => {
+        const password = config.get<string>('REDIS_PASSWORD');
+        const connection: {
+          host: string;
+          port: number;
+          password?: string;
+          tls?: object;
+        } = {
           host: config.get<string>('REDIS_HOST', 'localhost'),
           port: config.get<number>('REDIS_PORT', 6379),
-          password: config.get<string>('REDIS_PASSWORD'),
-        },
-      }),
+        };
+        if (password) {
+          connection.password = password;
+        }
+        if (config.get<string>('REDIS_TLS_ENABLED') === 'true') {
+          connection.tls = { rejectUnauthorized: false };
+        }
+        return { connection };
+      },
     }),
     PrismaModule,
     EmailModule,

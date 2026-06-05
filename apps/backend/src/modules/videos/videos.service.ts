@@ -4,12 +4,12 @@ import {
   NotFoundException,
   BadRequestException,
   ForbiddenException,
-  Inject,
 } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { VideosRepository } from './videos.repository';
 import { PrismaService } from '../../database/prisma.service';
+import { StorageService } from '../../storage/storage.service';
 import { InitiateUploadDto } from './dto/initiate-upload.dto';
 import { UploadChunkDto } from './dto/upload-chunk.dto';
 import { CompleteUploadDto } from './dto/complete-upload.dto';
@@ -23,7 +23,7 @@ export class VideosService {
   constructor(
     private readonly videosRepository: VideosRepository,
     private readonly prisma: PrismaService,
-    @Inject('StorageService') private readonly storageService: any,
+    private readonly storageService: StorageService,
     @InjectQueue('video-processing') private readonly videoQueue: Queue,
   ) {}
 
@@ -67,9 +67,7 @@ export class VideosService {
     const buffer = Buffer.from(dto.chunkData, 'base64');
 
     try {
-      await this.storageService.uploadBuffer(chunkPath, buffer, {
-        contentType: 'application/octet-stream',
-      });
+      await this.storageService.uploadFile(buffer, chunkPath, 'application/octet-stream');
     } catch (error) {
       this.logger.error(`Failed to upload chunk ${dto.chunkIndex} for ${dto.uploadId}: ${(error as Error).message}`);
       throw new BadRequestException('Failed to upload chunk');
@@ -159,6 +157,10 @@ export class VideosService {
       return { signedUrl: video.signedUrl, expiresAt: video.signedUrlExpiry };
     }
 
+    if (!video.firebaseUrl) {
+      throw new BadRequestException('Video file not available');
+    }
+
     const signedUrl = await this.storageService.getSignedUrl(video.firebaseUrl, 3600);
     const expiry = new Date(Date.now() + 3600 * 1000);
     await this.videosRepository.updateSignedUrl(videoId, signedUrl, expiry);
@@ -190,6 +192,10 @@ export class VideosService {
     }
     if (video.status !== 'READY') {
       throw new BadRequestException('Video is not ready');
+    }
+
+    if (!video.firebaseUrl) {
+      throw new BadRequestException('Video file not available');
     }
 
     const signedUrl = await this.storageService.getSignedUrl(video.firebaseUrl, 3600);

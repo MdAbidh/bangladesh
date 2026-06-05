@@ -53,28 +53,28 @@ const dateRanges = [
 
 const userGrowth = Array.from({ length: 12 }, (_, i) => ({
   month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
-  students: Math.floor(Math.random() * 800) + 400,
-  teachers: Math.floor(Math.random() * 30) + 10,
-  total: Math.floor(Math.random() * 1000) + 500,
+  students: 400 + (i * 67) % 800,
+  teachers: 10 + (i * 3) % 30,
+  total: 500 + (i * 83) % 1000,
 }));
 
 const revenueData = Array.from({ length: 12 }, (_, i) => ({
   month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
-  revenue: Math.floor(Math.random() * 40000) + 10000,
-  subscriptions: Math.floor(Math.random() * 20000) + 5000,
-  oneTime: Math.floor(Math.random() * 15000) + 3000,
+  revenue: 10000 + (i * 3333) % 40000,
+  subscriptions: 5000 + (i * 1666) % 20000,
+  oneTime: 3000 + (i * 1250) % 15000,
 }));
 
 const coursePerformance = Array.from({ length: 8 }, (_, i) => ({
   name: ['Web Dev', 'Data Science', 'Mobile Apps', 'UI/UX', 'Business', 'Marketing', 'AI/ML', 'Cloud'][i],
-  enrollments: Math.floor(Math.random() * 500) + 100,
-  completion: Math.floor(Math.random() * 40) + 40,
-  rating: Number((3.5 + Math.random() * 1.5).toFixed(1)),
+  enrollments: 100 + (i * 71) % 500,
+  completion: 40 + (i * 5) % 40,
+  rating: Number((3.5 + (i % 5) * 0.3).toFixed(1)),
 }));
 
 const retentionData = Array.from({ length: 12 }, (_, i) => ({
   week: `Week ${i + 1}`,
-  retention: Math.max(100 - i * 7 + Math.floor(Math.random() * 10), 10),
+  retention: Math.max(100 - i * 7 + (i * 13) % 10, 10),
 }));
 
 const geoData = [

@@ -50,12 +50,12 @@ import {
 
 const dailyActiveUsers = Array.from({ length: 30 }, (_, i) => ({
   day: `Day ${i + 1}`,
-  users: Math.floor(Math.random() * 400) + 100,
+  users: 100 + (i * 17) % 400,
 }));
 
 const signupsPerDay = Array.from({ length: 30 }, (_, i) => ({
   day: `Day ${i + 1}`,
-  signups: Math.floor(Math.random() * 80) + 20,
+  signups: 20 + (i * 7) % 80,
 }));
 
 const courseDistribution = [

@@ -18,15 +18,29 @@ export class HealthController {
     const redisHost = this.configService.get<string>('redis.host');
     const redisPort = this.configService.get<number>('redis.port');
     const redisPassword = this.configService.get<string>('redis.password');
+    const redisTls = this.configService.get<boolean>('redis.tlsEnabled') === true;
 
     if (redisHost && redisPort) {
-      this.redis = new Redis({
+      const redisOptions: {
+        host: string;
+        port: number;
+        password?: string;
+        maxRetriesPerRequest: number;
+        lazyConnect: boolean;
+        tls?: object;
+      } = {
         host: redisHost,
         port: redisPort,
-        password: redisPassword,
         maxRetriesPerRequest: 1,
         lazyConnect: true,
-      });
+      };
+      if (redisPassword) {
+        redisOptions.password = redisPassword;
+      }
+      if (redisTls) {
+        redisOptions.tls = { rejectUnauthorized: false };
+      }
+      this.redis = new Redis(redisOptions);
     }
   }
 
@@ -80,7 +94,7 @@ export class HealthController {
     const externalMb = Math.round(memoryUsage.external / 1024 / 1024 * 100) / 100;
     const usagePercent = heapTotalMb > 0 ? Math.round((heapUsedMb / heapTotalMb) * 10000) / 100 : 0;
 
-    const isHealthy = dbStatus === 'connected' && (this.redis ? redisStatus === 'connected' : true);
+    const isHealthy = dbStatus === 'connected';
 
     return {
       status: isHealthy ? 'healthy' : 'unhealthy',

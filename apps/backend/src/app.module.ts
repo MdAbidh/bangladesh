@@ -60,24 +60,25 @@ import configuration from './config/configuration';
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        connection: {
+      useFactory: (config: ConfigService) => {
+        const password = config.get<string>('REDIS_PASSWORD');
+        const connection: {
+          host: string;
+          port: number;
+          password?: string;
+          tls?: object;
+        } = {
           host: config.get<string>('REDIS_HOST', 'localhost'),
           port: config.get<number>('REDIS_PORT', 6379),
-          password: config.get<string>('REDIS_PASSWORD') || undefined,
-          // Optional: gracefully handle missing Redis locally
-          enableOfflineQueue: false,
-          lazyConnect: true,
-          retryStrategy: (times: number) => {
-            if (times > 3) return null; // stop retrying after 3 attempts
-            return Math.min(times * 1000, 3000);
-          },
-        },
-        defaultJobOptions: {
-          removeOnComplete: true,
-          removeOnFail: false,
-        },
-      }),
+        };
+        if (password) {
+          connection.password = password;
+        }
+        if (config.get<string>('REDIS_TLS_ENABLED') === 'true') {
+          connection.tls = { rejectUnauthorized: false };
+        }
+        return { connection };
+      },
     }),
     PrismaModule,
     AuthModule,

@@ -63,8 +63,8 @@ const mockUsers = Array.from({ length: 50 }, (_, i) => ({
   role: (['STUDENT', 'TEACHER', 'STUDENT', 'TEACHER', 'STUDENT', 'ADMIN', 'STUDENT', 'TEACHER'] as const)[i % 8],
   status: (['active', 'active', 'active', 'active', 'inactive', 'active', 'suspended', 'active'] as const)[i % 8],
   joined: `2024-${String((i % 12) + 1).padStart(2, '0')}-${String((i % 28) + 1).padStart(2, '0')}`,
-  courses: Math.floor(Math.random() * 20),
-  revenue: Math.floor(Math.random() * 5000),
+  courses: (i * 3) % 20,
+  revenue: (i * 250) % 5000,
   avatarUrl: null,
 }));
 

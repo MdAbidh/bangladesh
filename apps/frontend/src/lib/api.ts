@@ -43,7 +43,7 @@ class ApiClient {
 
             if (refreshToken) {
               const { data } = await axios.post<ApiResponse<{ accessToken: string; refreshToken: string }>>(
-                `${BASE_URL}/auth/refresh-token`,
+                `${BASE_URL}/auth/refresh`,
                 { refreshToken },
               );
 

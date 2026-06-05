@@ -29,20 +29,11 @@ services:
       - key: JWT_REFRESH_EXPIRY
         value: "7d"
       - key: REDIS_HOST
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: host
+        value: finer-whippet-143275.upstash.io
       - key: REDIS_PORT
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: port
+        value: "6379"
       - key: REDIS_PASSWORD
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: password
+        sync: false
       - key: REDIS_TLS_ENABLED
         value: "true"
       - key: FIREBASE_PROJECT_ID
@@ -95,20 +86,11 @@ services:
       - key: DATABASE_URL
         value: postgresql://ahlearningdb_user:oIo9iBvxtoeY8XoNshzZiygKX5XoMcYQ@dpg-d8g70m3bc2fs73cbihmg-a.singapore-postgres.render.com/ahlearningdb
       - key: REDIS_HOST
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: host
+        value: finer-whippet-143275.upstash.io
       - key: REDIS_PORT
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: port
+        value: "6379"
       - key: REDIS_PASSWORD
-        fromService:
-          type: redis
-          name: ah-learning-cache
-          property: password
+        sync: false
       - key: REDIS_TLS_ENABLED
         value: "true"
       - key: FIREBASE_PROJECT_ID
@@ -131,9 +113,3 @@ services:
         value: noreply@ahlearning.com
       - key: SMTP_FROM_NAME
         value: A.H Learning
-
-redis:
-  - name: ah-learning-cache
-    plan: starter
-    region: singapore
-    maxmemoryPolicy: allkeys-lru

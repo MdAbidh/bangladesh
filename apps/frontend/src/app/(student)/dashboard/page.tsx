@@ -171,7 +171,9 @@ export default function StudentDashboardPage() {
           </Link>
         </div>
         <div className="mt-4 flex gap-4 overflow-x-auto pb-4 scrollbar-thin">
-          {MOCK_CONTINUE.map((course) => (
+          {MOCK_CONTINUE.map((course, idx) => {
+            const progress = [35, 62, 18][idx] || 30;
+            return (
             <motion.div key={course.id} whileHover={{ y: -4 }} className="min-w-[280px] flex-shrink-0">
               <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg dark:border-gray-800 dark:bg-gray-900">
                 <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary-500 to-secondary-500">
@@ -180,13 +182,13 @@ export default function StudentDashboardPage() {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   <Badge variant="glass" size="sm" className="absolute left-3 top-3">
-                    {Math.floor(Math.random() * 60 + 20)}% complete
+                    {progress}% complete
                   </Badge>
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">{course.title}</h3>
                   <p className="mt-1 text-sm text-gray-500 line-clamp-1 dark:text-gray-400">{course.shortDescription}</p>
-                  <Progress value={Math.floor(Math.random() * 60 + 20)} size="sm" className="mt-3" />
+                  <Progress value={progress} size="sm" className="mt-3" />
                   <Link href={`/courses/${course.slug}`}>
                     <Button variant="glass-primary" size="sm" fullWidth className="mt-3" leftIcon={<PlayCircle className="h-4 w-4" />}>
                       Resume
@@ -195,7 +197,8 @@ export default function StudentDashboardPage() {
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 

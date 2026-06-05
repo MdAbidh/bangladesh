@@ -63,12 +63,12 @@ const mockCourses = Array.from({ length: 40 }, (_, i) => ({
   instructor: ['John Doe', 'Jane Smith', 'Dr. Rahman', 'Sarah Khan', 'Mike Chen', 'Prof. Lisa Wang', 'Ahmed Hassan', 'Maria Garcia'][i % 8],
   category: (['web', 'data', 'data', 'design', 'web', 'data', 'mobile', 'business'] as const)[i % 8],
   status: (['PUBLISHED', 'PENDING', 'PUBLISHED', 'PENDING', 'PUBLISHED', 'DRAFT', 'PUBLISHED', 'ARCHIVED'] as const)[i % 8],
-  students: Math.floor(Math.random() * 1500),
-  revenue: Math.floor(Math.random() * 100000),
-  rating: Number((3.5 + Math.random() * 1.5).toFixed(1)),
-  price: Math.floor(Math.random() * 200) + 9.99,
-  lessons: Math.floor(Math.random() * 60) + 10,
-  duration: Math.floor(Math.random() * 40) + 5,
+  students: (i * 37) % 1500,
+  revenue: (i * 1234) % 100000,
+  rating: Number((3.5 + (i % 5) * 0.3).toFixed(1)),
+  price: 9.99 + (i % 200),
+  lessons: 10 + (i * 3) % 60,
+  duration: 5 + (i * 2) % 40,
   featured: i % 5 === 0,
   createdAt: `2024-${String((i % 12) + 1).padStart(2, '0')}-${String((i % 28) + 1).padStart(2, '0')}`,
   thumbnail: null,
@@ -403,7 +403,7 @@ export default function AdminCourses() {
                         <BarChart3 className="h-4 w-4" />
                         Completion Rate
                       </div>
-                      <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{Math.floor(Math.random() * 40 + 50)}%</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{50 + (parseInt(course.id.replace('course_', '')) * 7) % 40}%</p>
                     </div>
                   </div>
                 </CardContent>

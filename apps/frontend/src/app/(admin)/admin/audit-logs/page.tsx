@@ -81,7 +81,7 @@ const mockLogs = Array.from({ length: 100 }, (_, i) => {
   };
   return {
     id: `log_${i + 1}`,
-    timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+    timestamp: new Date(2024, 5, 1, 12, 0, 0).toISOString(),
     action,
     resource,
     actor: actors,

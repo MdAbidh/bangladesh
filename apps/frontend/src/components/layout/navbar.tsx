@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -20,6 +20,7 @@ import {
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/lib/constants';
 import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/use-auth';
 import { useUIStore } from '@/store/ui-store';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -49,14 +50,15 @@ interface NavbarProps {
 export function Navbar({ className, onSearchOpen, notificationCount = 0 }: NavbarProps) {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuthStore();
+  const { logout } = useAuth();
   const { mobileMenuOpen, toggleMobileMenu, setMobileMenuOpen } = useUIStore();
   const [scrolled, setScrolled] = useState(false);
 
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', () => {
-      setScrolled(window.scrollY > 10);
-    }, { passive: true });
-  }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === ROUTES.HOME) return pathname === '/';
@@ -178,7 +180,11 @@ export function Navbar({ className, onSearchOpen, notificationCount = 0 }: Navba
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem icon={<LogOut className="h-4 w-4" />} destructive>
+                <DropdownMenuItem
+                  icon={<LogOut className="h-4 w-4" />}
+                  destructive
+                  onClick={() => logout()}
+                >
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenu>

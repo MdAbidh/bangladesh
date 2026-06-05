@@ -201,7 +201,7 @@ export const authService = {
       console.log(`[MOCK AUTH] New OTP for ${email}: ${otp} (valid 5 min)`);
       return { success: true, message: 'OTP sent. Check console.', data: { message: 'OTP sent', otp } };
     }
-    return api.post<{ message: string }>(API_ENDPOINTS.AUTH.RESEND_OTP, { email });
+    return api.post<{ message: string }>(API_ENDPOINTS.AUTH.SEND_OTP, { email });
   },
 
   async refreshToken(refreshToken: string): Promise<ApiResponse<AuthResponse>> {
@@ -255,6 +255,6 @@ export const authService = {
       }
       throw new Error('Not authenticated');
     }
-    return api.patch<User>(API_ENDPOINTS.AUTH.PROFILE, payload);
+    return api.put<User>(API_ENDPOINTS.AUTH.PROFILE, payload);
   },
 };
